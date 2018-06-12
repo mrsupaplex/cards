@@ -14,7 +14,7 @@ import java.util.List;
 class ImageCard {
 
     public enum ImageState {
-        DEFAULT, PENDING_DELETION, DELETED;
+        DEFAULT, PENDING_DELETION, FAVORITE;
     }
 
     private String path;

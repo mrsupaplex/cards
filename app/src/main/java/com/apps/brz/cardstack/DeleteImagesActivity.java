@@ -15,36 +15,33 @@ import java.util.List;
 
 public class DeleteImagesActivity extends AppCompatActivity {
 
-    private Button deleteImageButton;
-    private Button backToMenuButton;
-
-    private ListView imagesListView;
-
-    private displayImagesAdapter adapter;
+    public static final String separator = "@sep@";
 
     private List<ImageCard> images;
+    private Button backToMenuButton;
+    private Button emptyRecycleBinButton;
+    private ListView imagesListView;
+    private displayImagesAdapter adapter;
+    private String file = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_images);
 
+        file = getString(R.string.delete_file);
 
-        Intent i = getIntent();
+        images = getImages();
 
-        String imagesListStr = i.getStringExtra("images");
-
-        images = ImageCard.fromJSONList(imagesListStr);
-
-        deleteImageButton = (Button) findViewById(R.id.delete_photos_btn);
         backToMenuButton = (Button) findViewById(R.id.back_to_menu_btn);
         imagesListView = (ListView) findViewById(R.id.images_list_view);
 
+        emptyRecycleBinButton = (Button) findViewById(R.id.empty_recycle_btn);
 
-        deleteImageButton.setOnClickListener(new View.OnClickListener() {
+        emptyRecycleBinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteImages();
+                emptyRecycleBin();
             }
         });
 
@@ -55,12 +52,33 @@ public class DeleteImagesActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new displayImagesAdapter(this, images);
+        adapter = new displayImagesAdapter(this, images, file);
 
         imagesListView.setAdapter(adapter);
+    }
 
+    private void emptyRecycleBin() {
+        deleteImages();
+        String buff = "";
+        FilesHandler.writeToFile(this, file, buff);
+        images = new ArrayList<>();
+        adapter = new displayImagesAdapter(this, images, file);
+        imagesListView.setAdapter(adapter);
+    }
 
-
+    private List<ImageCard> getImages() {
+        List<ImageCard> list = new ArrayList<ImageCard>();
+        String buff = FilesHandler.readFromFile(this, getString(R.string.delete_file));
+        if (buff == null || buff.length() < 2) {
+            return list;
+        }
+        for (String s: buff.split(separator)) {
+            if (s != null && s.length() > 1) {
+                ImageCard imageCard = new ImageCard(s);
+                list.add(imageCard);
+            }
+        }
+        return list;
     }
 
     private void backToMenu() {
@@ -86,6 +104,5 @@ public class DeleteImagesActivity extends AppCompatActivity {
                 }
             }
         }
-        backToMenu();
     }
 }

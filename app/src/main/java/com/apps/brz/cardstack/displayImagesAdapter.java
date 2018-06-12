@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -24,11 +25,15 @@ import java.util.List;
 class displayImagesAdapter extends ArrayAdapter<ImageCard> {
 
     private Context context;
+    private List<ImageCard> images;
+    private String file;
 
 
-    public displayImagesAdapter(@NonNull Context context, List<ImageCard> images) {
+    public displayImagesAdapter(@NonNull Context context, List<ImageCard> images, String file) {
         super(context, 0, images);
         this.context = context;
+        this.images = images;
+        this.file = file;
     }
 
     @Override
@@ -45,6 +50,10 @@ class displayImagesAdapter extends ArrayAdapter<ImageCard> {
         Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(image.getPath()), 500, 1000);
 
         singleImageView.setImageBitmap(ThumbImage);
+
+        Button XButton = (Button) convertView.findViewById(R.id.x_btn);
+
+        XButton.setOnClickListener(new IntOnClickListener(this, image, file));
 
         return convertView;
     }

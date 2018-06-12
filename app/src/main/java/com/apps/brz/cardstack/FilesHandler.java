@@ -63,6 +63,12 @@ public class FilesHandler {
         return null;
     }
 
+    public static void removeFromFile(Context context, String file, String str) {
+        String buff = readFromFile(context, file);
+        buff = buff.replace(str, "");
+        writeToFile(context, file, buff);
+    }
+
 
 }
 

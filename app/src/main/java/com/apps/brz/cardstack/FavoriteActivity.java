@@ -25,6 +25,8 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+        String file = getString(R.string.star_file); //TODO: get with intent
+
         images = getImages();
 
         backToMenuButton = (Button) findViewById(R.id.back_to_menu_btn);
@@ -37,7 +39,7 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new displayImagesAdapter(this, images);
+        adapter = new displayImagesAdapter(this, images, file);
 
         imagesListView.setAdapter(adapter);
     }
@@ -49,8 +51,10 @@ public class FavoriteActivity extends AppCompatActivity {
             return list;
         }
         for (String s: buff.split(separator)) {
-            ImageCard imageCard = new ImageCard(s);
-            list.add(imageCard);
+            if (s != null && s.length() > 1) {
+                ImageCard imageCard = new ImageCard(s);
+                list.add(imageCard);
+            }
         }
         return list;
     }

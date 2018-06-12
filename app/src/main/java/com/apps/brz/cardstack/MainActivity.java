@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -148,12 +149,12 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
     }
 
 
-
+    // TODO: remove this bad code
     private void initImages() {
         card_adapter = new CardAdapter(getApplicationContext(),0);
-        card_adapter.add(R.drawable.fartapp3);
+        card_adapter.add(R.drawable.check);
         for (int i = 0; i < 5; i++)
-            card_adapter.add(R.drawable.screenshot1);
+            card_adapter.add(R.drawable.share);
 
         card_adapter_img = new CardAdapterImage(getApplicationContext(),0);
 
@@ -196,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
                 // TODO: keep the file path so it wont be used next time
                 break;
             case DELETE:
-                images.get(imageIndex).setState(ImageCard.ImageState.PENDING_DELETION);
+                //images.get(imageIndex).setState(ImageCard.ImageState.PENDING_DELETION);
+                deleteImage(images.get(imageIndex));
                 break;
             case STAR:
                 starImage(images.get(imageIndex));
@@ -211,31 +213,37 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
         }
 
         if (imageIndex + 1 >= NUM_OF_IMAGES) {
-            for (ImageCard image: images) {
-                if (image.getState() == ImageCard.ImageState.PENDING_DELETION) {
-                    deleteImages();
-                    return;
-                }
-            }
+            //for (ImageCard image: images) {
+            //    if (image.getState() == ImageCard.ImageState.PENDING_DELETION) {
+            //        deleteImages();
+            //        return;
+            //    }
+            //}
             backToMenu();
         }
     }
 
     private void starImage(ImageCard imageCard) {
+        putImageInFile(imageCard, getString(R.string.star_file));
+    }
+
+    private void deleteImage(ImageCard imageCard) {
+        putImageInFile(imageCard, getString(R.string.delete_file));
+    }
+
+    private void putImageInFile(ImageCard imageCard, String file) {
         String path = imageCard.getPath();
-        String buff = FilesHandler.readFromFile(this, getString(R.string.star_file));
+        String buff = FilesHandler.readFromFile(this, file);
 
         if (buff != null && buff.length() > 1) {
-            for (String s : buff.split("\n")) {
-                if (s.equals(path)) {
-                    return;
-                }
+            if (buff.contains(path)) {
+                return;
             }
         }
         else {
             buff = "";
         }
-        FilesHandler.writeToFile(this, getString(R.string.star_file), buff + FavoriteActivity.separator + imageCard.getPath());
+        FilesHandler.writeToFile(this, file, buff + FavoriteActivity.separator + imageCard.getPath());
     }
 
     private void shareImage(int imageIndex) {

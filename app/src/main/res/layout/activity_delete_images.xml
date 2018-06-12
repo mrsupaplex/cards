@@ -27,20 +27,21 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/delete_photos_btn"
                 android:layout_weight="1"
-                android:text="@string/delete_photos"/>
+                android:id="@+id/back_to_menu_btn"
+                android:text="@string/back_to_menu"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/back_to_menu_btn"
-                android:text="@string/back_to_menu"/>
+                android:id="@+id/empty_recycle_btn"
+                android:text="@string/empty_recycle_bin"/>
 
         </LinearLayout>
 
 
     </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

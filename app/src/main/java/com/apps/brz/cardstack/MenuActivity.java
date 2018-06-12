@@ -13,6 +13,8 @@ public class MenuActivity extends AppCompatActivity {
 
     private Button startSwipingButton;
     private Button showFavoritesButton;
+    private Button recycleBinButton;
+    private Button settingsButton;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 5000;
 
     @Override
@@ -37,6 +39,34 @@ public class MenuActivity extends AppCompatActivity {
                 viewFavorites();
             }
         });
+
+        recycleBinButton = (Button) findViewById(R.id.view_recycle_bin_btn);
+
+        recycleBinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewRecycleBin();
+            }
+        });
+
+        settingsButton = (Button) findViewById(R.id.view_settings_btn);
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewSettings();
+            }
+        });
+    }
+
+    private void viewSettings() {
+        Intent i = new Intent(MenuActivity.this, OldPreferenceActivity.class);
+        startActivity(i);
+    }
+
+    private void viewRecycleBin() {
+        Intent i = new Intent(MenuActivity.this, DeleteImagesActivity.class);
+        startActivity(i);
     }
 
     private void viewFavorites() {
@@ -47,7 +77,9 @@ public class MenuActivity extends AppCompatActivity {
     private void handlePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
+                    != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
                 if (shouldShowRequestPermissionRationale(
@@ -70,6 +102,32 @@ public class MenuActivity extends AppCompatActivity {
     private void moveToSwiping() {
         Intent i = new Intent(MenuActivity.this, MainActivity.class);
         startActivity(i);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    moveToSwiping();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 
 

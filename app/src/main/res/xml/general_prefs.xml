@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/general"
+        android:key="sound_title">
+
+        <ListPreference
+            android:key="number_of_photos"
+            android:title="Num Photos"
+            android:entries="@array/num_photos"
+            android:entryValues="@array/num_photos_data"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
