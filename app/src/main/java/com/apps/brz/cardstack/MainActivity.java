@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -14,6 +15,8 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements CardStack.CardEventListener {
+public class MainActivity extends Activity implements CardStack.CardEventListener {
 
     public enum SwipeDirection {
         KEEP, DELETE, STAR, SHARE;
@@ -44,6 +47,15 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+//Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+//set content view AFTER ABOVE sequence (to avoid crash)
         setContentView(R.layout.activity_main);
 
         initImages();
@@ -56,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
 
 
         card_stack.setListener(this);
+
+  //      card_stack.setBackgroundColor(Color.BLACK);
+        card_stack.setDrawingCacheBackgroundColor(Color.BLACK);
 
        // Thread t = new Thread(new Runnable() {
      //       @Override
@@ -103,9 +118,15 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
 
         if(imgFile.exists()){
 
+
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
+            bitmap = Bitmap.createScaledBitmap(bitmap,500,1000,true);
+
            // Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-            ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 500, 1000);
+            //ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 500, 1000);
+            ThumbImage = BitmapFactory.decodeFile(path);
 
      //       try {
      //           Thread.sleep(500);
@@ -156,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
         for (int i = 0; i < 5; i++)
             card_adapter.add(R.drawable.share);
 
-        card_adapter_img = new CardAdapterImage(getApplicationContext(),0);
+        card_adapter_img = new CardAdapterImage(getApplicationContext(),0, this);
 
     }
 

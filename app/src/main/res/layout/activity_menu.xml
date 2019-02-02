@@ -7,6 +7,7 @@
     tools:context="com.apps.brz.cardstack.MenuActivity">
 
     <LinearLayout
+        android:background="@drawable/picframe"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,10 +26,11 @@
 
             <Button
                 android:id="@+id/start_swiping_btn"
+                android:background="@drawable/startswpbtn"
+                android:textSize="20dp"
                 android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:text="@string/start_swiping" />
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
 
 
         </RelativeLayout>
@@ -52,10 +54,10 @@
 
 
                 <Button
+                    android:id="@+id/view_favorites_btn"
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/view_favorites_btn"
-                    android:text="@string/view_favorites"/>
+                    android:background="@drawable/favbtn"/>
 
                 <LinearLayout
                     android:layout_width="40dp"
@@ -67,7 +69,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:id="@+id/view_recycle_bin_btn"
-                    android:text="@string/view_recycle_bin"/>
+                    android:background="@drawable/recyclebtn"/>
 
 
 
